@@ -1,0 +1,22 @@
+html{
+    background-color: rgba(255, 211, 144, 0.39);
+}
+
+body{
+
+}
+
+p{
+    width: fit-content;
+    padding: 10pt;
+    color: brown;
+    background-color: #efd8ff;
+}
+
+#date{
+    margin: 4pt;
+}
+
+#button{
+    margin: 4pt;
+}
