@@ -1,16 +1,67 @@
 html{
-    background-color: rgba(255, 211, 144, 0.39);
+    background-color: rgba(255, 131, 222, 0.39);
 }
 
 body{
-
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    transition: background-color .5s;
 }
 
 p{
     width: fit-content;
     padding: 10pt;
     color: brown;
-    background-color: #efd8ff;
+    background-color: #fff7cd;
+}
+
+#containerMenu{
+    width: 0vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    margin: 0pt;
+    padding: 0pt;
+    background-color: #333333;
+    transition: 0.5s;
+}
+
+#navMenu{
+    overflow: hidden;
+    opacity: 0.0;
+    transition: 0.5s;
+}
+
+#navMenu a{
+    display: block;
+    color: white;
+    text-align: center;
+    margin-top: 16pt;
+    padding-top: 16pt;
+    padding-bottom: 16pt;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: 0.5s;
+}
+
+#navMenu a:hover{
+    background-color: #111111;
+}
+
+#closeOpenBtn{
+    position: absolute;
+    top: 1vh;
+    left: 0vw;
+    padding: 8pt;
+    border-top-right-radius: 8pt;
+    border-bottom-right-radius: 8pt;
+    color: white;
+    background-color: #333333;
+    cursor: pointer;
+    transition: 0.5s;
 }
 
 #date{
@@ -19,4 +70,10 @@ p{
 
 #button{
     margin: 4pt;
+}
+
+#image{
+    width: 60pt;
+    height: 100pt;
+    alignment: left;
 }
