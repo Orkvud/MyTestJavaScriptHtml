@@ -1,12 +1,18 @@
 html{
-    background-color: rgba(255, 131, 222, 0.39);
+
 }
 
 body{
     width: 100vw;
-    height: 100vh;
-    margin: 0;
+    height: 300vh;
     transition: background-color .5s;
+    float: left;
+}
+
+h1{
+    width: 100%;
+    text-align: center;
+    color: #da7137;
 }
 
 p{
@@ -65,15 +71,29 @@ p{
 }
 
 #date{
-    margin: 4pt;
+    margin-top: 8pt;
+    margin-right: 8pt;
+    margin-bottom: 8pt;
 }
 
 #button{
-    margin: 4pt;
+    margin-top: 8pt;
+    margin-right: 8pt;
+    margin-bottom: 8pt;
 }
 
 #image{
     width: 60pt;
     height: 100pt;
     alignment: left;
+}
+
+#testFlex{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#testFlex div{
+    margin: 1px;
+    background-color: #da7137;
 }

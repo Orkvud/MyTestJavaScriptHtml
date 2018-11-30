@@ -50,7 +50,7 @@ function showNavMenu(show) {
         containerMenu.style.width = "0vw";
         closeOpenBtn.style.left = "0vw";
         navMenu.style.opacity = "0.0"
-        document.body.style.backgroundColor = "rgba(255, 211, 144, 0.39)";
+        document.body.style.backgroundColor = "rgba(220, 220, 220, 1.0)";
         isNawMenuShown = false;
     }
 }
