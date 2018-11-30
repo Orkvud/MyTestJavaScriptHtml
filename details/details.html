@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="author" content="Denis Chabannyi">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Details</title>
+
+    <link rel="stylesheet" href="css/detailsScreen.css">
+
+    <script src="scripts/details.js" defer></script>
+</head>
+<body>
+
+    <H1>Details page.</H1>
+
+    <nav class="menu">
+        <ul>
+            <li><a href="#abbr">Абревиатура</a></li>
+            <li><a href="#code">Код</a></li>
+            <li><a href="#datatime">Дата и время</a></li>
+        </ul>
+    </nav>
+
+    <p id="goToBottom">Scroll to bottom.</p>
+
+    <p><a href="mailto:ededed@gmail.com">Send email</a></p>
+
+    <div id="bottomText">Bottom text.</div>
+
+    <dl>
+        <dt>One</dt>
+        <dd>Description one</dd>
+        <dt>Two</dt>
+        <dd>Description two</dd>
+        <dd>Description two two</dd>
+    </dl>
+
+    <p>According to the
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/blockquote">
+            <cite>MDN blockquote page</cite>
+        </a>:
+    </p>
+
+    <blockquote cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/blockquote">
+        <p>The <strong>HTML <code>&lt;blockquote&gt;</code> Element</strong> (or
+            <em>HTML Block Quotation Element</em>) indicates that the enclosed text is an extended quotation.</p>
+    </blockquote>
+
+    <p>The quote element — <code>&lt;q&gt;</code> — is
+        <q cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/q">intended for short quotations that
+            don't require paragraph breaks.</q> --
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/q"><cite>MDN q page</cite></a>.</p>
+
+    <abbr id="abbr" title="Подсказка, что то там зашифровано, но что не понятно">TP:D</abbr>
+
+    <address>
+        <p>Teg "Address". Page written by Anonymous.</p>
+    </address>
+
+    <p>Тут<sup>верхний индекс</sup>, а вот тут <sub>нижний индекс</sub>.</p>
+
+    <pre id="code"><code>var para = document.querySelector('p');
+
+para.onclick = function() {
+alert('Owww, stop poking me!');
+};
+    </code></pre>
+
+    <p>You shouldn't use presentational elements like <code>&lt;font&gt;</code> and <code>&lt;center&gt;</code>.</p>
+
+    <p>In the above JavaScript example, <var>para</var> represents a paragraph element.</p>
+
+
+    <p>Select all the text with <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>A</kbd>.</p>
+
+    <pre>$ <kbd>ping mozilla.org</kbd>
+<samp>PING mozilla.org (63.245.215.20): 56 data bytes
+64 bytes from 63.245.215.20: icmp_seq=0 ttl=40 time=158.233 ms</samp></pre>
+
+    <time id="datatime" datetime="2016-01-20">20 Января 2016</time><br>
+    <time datetime="2016-01">Январь 2016</time><br>
+    <time datetime="01-20">20 Января</time><br>
+    <time datetime="19:30">19:30</time><br>
+    <time datetime="19:30:01.856">19:30:01.856</time><br>
+    <time datetime="2016-01-20T19:30">7.30pm, 20 Января 2016</time><br>
+    <time datetime="2016-01-20T19:30+01:00">7.30pm, 20 Января 2016 is 8.30pm in France</time><br>
+    <time datetime="2016-W04">Четвертая неделя 2016</time><br>
+</body>
+</html>

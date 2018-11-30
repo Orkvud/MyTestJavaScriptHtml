@@ -1,0 +1,18 @@
+body{
+    width: 100vw;
+    height: 400vh;
+}
+
+h1{
+    color: chocolate;
+}
+
+#goToBottom{
+    cursor: pointer;
+    color: cornflowerblue;
+}
+
+#bottomText{
+    position: absolute;
+    top: 400vh;
+}

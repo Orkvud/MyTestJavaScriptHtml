@@ -1,51 +1,101 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <meta name="author" content="Denis Chabannyi">
-    <link rel="shortcut icon" href="assets/icons/favicon.ico" type="image/x-icon">
-    <title>My first web page ))</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="css/test.css">
+    <link rel="shortcut icon" href="assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/index.css">
 
-    <script src="scripts/main.js" defer></script>
+    <title>My first web page ))</title>
+
+    <script src="scripts/index.js" defer></script>
 </head>
 <body>
+    <header>Header!</header>
 
-    <!--<ul id="navMenu">-->
-        <!--<li><a href="#title1">Title 1</a></li>-->
-        <!--<li><a href="#title2">Title 2</a></li>-->
-        <!--<li><a href="#title3">Title 3</a></li>-->
-    <!--</ul>-->
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="navMenu/navMenu.html">Nav menu</a></li>
+            <li><a href="details/details.html">Details</a></li>
+            <li><a href="seaBattle/seaBattle.html">Sea battle</a></li>
+        </ul>
 
-    <div id="containerMenu">
-        <div id="navMenu">
-            <a href="#title1">Title 1</a>
-            <a href="#title2">Title 2</a>
-            <a href="#title3">Title 3</a>
-        </div>
+        <form>
+            <input type="search" name="q" placeholder="Search query">
+            <input type="submit" value="Go!">
+        </form>
+    </nav>
 
-        <div id="closeOpenBtn">&#9776;</div>
-    </div>
+    <main>
+        <article>
+            <h2>Article heading</h2>
 
-    <div><p>Page.
-        <em>Курсив &apos;
-            <a href="https://developer.mozilla.org/ru/docs/Learn/HTML/%D0%92%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B2_HTML/%D0%9D%D0%B0%D1%87%D0%B0%D0%BB%D0%BE_%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B"
-               title="Подсказочка"
-               target="_blank">ссылка на что то</a>
-            ,уже не ссылка &#9776; &times;</em>
-        и не курсив</p></div>
+            <time datetime="2014-09-25T12:00"> 25 September 2014</time>
 
-    <div>
-        <input id="date" type="date" min="2010-01-01" max="2020-12-31">
-        <button id="button">Press me</button>
-    </div>
+            <p>As any English-speaking child can tell you, there is no denying Dr. Seuss. If you love to read,
+                but you’re a little afraid of reading a full-on novel in English, don’t worry.
+                We’re going to help you get there, step by step. With every book you read, the more you’ll improve.
+                To get started, there are some excellent novels written in English that are not too difficult
+                to understand. Anyway, it’s good to set yourself a language challenge now and again.
+                How else are you going to improve in English?</p>
 
-    <div>
-        <img id="image" src="assets/image/Screenshot_1527853363.png" alt="Когда нет изображения">
-    </div>
+            <h3>Reading is rewarding.</h3>
+
+            <p data-meat="cc">Being able to read a novel in another language and understand it is a huge achievement.
+                You’ll feel accomplished the moment you read that final page, close the book,
+                and reflect on the experience. You might find yourself at the last page faster than you thought –
+                once you begin reading these books, you won’t be able to put them down.</p>
+
+            <h3>Reading is an exercise in language learning.</h3>
+
+            <p data-meat="ccc">Reading English novels will help improve your vocabulary,
+                general understanding and in some cases it may even give you more knowledge into different countries
+                and their cultures. You also get to move at your own pace. While listening to podcasts and radio,
+                you have to keep up with whoever is speaking. Sure, watching movies to learn English
+                can be a lot of fun, but doesn’t it get tiring to have to read subtitles or pause and rewind?
+                While reading a book, you can read as slowly or as quickly as you desire.
+                If you didn’t understand something, simply look at the paragraph again!</p>
+
+            <h3>Reading opens the mind.</h3>
+
+            <p data-meat="ds cc">Reading educates. It opens you up to new experiences and perspectives.
+                What better way is there to understand someone’s way of thinking?
+                You may learn new information about  language, culture, society,
+                and history that you never knew before.</p>
+
+            <h3>Reading is fun!</h3>
+
+            <p>It is, overall, an enjoyable and relaxing way to learn English without any stress whatsoever.
+                People get frustrated when they choose books that go above their reading levels.
+                By choosing your first English books wisely, you should have a very positive experience.<br>
+
+                If you enjoy this type of entertaining language learning, you can get a similar experience with FluentU.
+                FluentU offers authentic English videos, like movie trailers, music videos, inspiring talks and more,
+                that’ve been transformed into a language learning experience.<br>
+
+                Each video comes with interactive captions, so you can instantly get definitions for
+                any unfamiliar words. There are also flashcards and exercises to help you remember them.
+                So when you’re taking a break from one of the great books below,
+                check out the FluentU free trial to keep learning while having fun!</p>
+        </article>
+
+        <aside>
+            <h2>Related</h2>
+
+            <ul>
+                <li><a href="#">Reading is rewarding.</a></li>
+                <li><a href="#">Reading is an exercise in language learning.</a></li>
+                <li><a href="#">Reading opens the mind.</a></li>
+                <li><a href="#">Reading is fun!</a></li>
+            </ul>
+        </aside>
+    </main>
+
+    <footer>
+        <p>©Copyright 2050 by nobody. All rights reversed.</p>
+    </footer>
 </body>
 </html>
