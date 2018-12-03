@@ -9,14 +9,22 @@
 
     <link rel="stylesheet" href="css/seaBattle.css">
 
+    <script src="scripts/utils.js" defer></script>
+    <script src="scripts/battleFieldModel.js" defer></script>
     <script src="scripts/seaBattle.js" defer></script>
 </head>
 <body>
     <header>Sea battle</header>
 
     <main>
-        <section>
-            <canvas id="battleField">Error</canvas>
+        <section id="yourSide">
+            <canvas id="yourBattleFieldBackground">Error</canvas>
+            <canvas id="yourBattleField">Error</canvas>
+        </section>
+
+        <section id="opponentSide">
+            <canvas id="opponentBattleFieldBackground">Error</canvas>
+            <canvas id="opponentBattleField">Error</canvas>
         </section>
     </main>
 

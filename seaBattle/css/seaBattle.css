@@ -20,7 +20,6 @@ header, main, footer {
     background-color: white;
     margin: 1vh 0;
     padding: 1%;
-
     border: 1vh solid white;
     background-clip: padding-box;
     border-radius: 1vh;
@@ -32,20 +31,33 @@ main {
 }
 
 section {
-    flex: auto;
+    position: relative;
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: auto;
 }
 
-#battleField {
+#yourBattleFieldBackground, #opponentBattleFieldBackground {
     margin: 0;
+    position: absolute;
+    z-index: 0;
+}
+
+#yourBattleField, #opponentBattleField {
+    margin: 0;
+    position: absolute;
+    z-index: 1;
     cursor: pointer;
     border: 1px solid white;
     transition: 0.5s;
 }
 
-#battleField:hover{
+#yourBattleField:hover {
+    border: 1px solid black;
+}
+
+#opponentBattleField:hover {
     border: 1px solid black;
 }

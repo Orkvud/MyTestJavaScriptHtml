@@ -1,90 +1,87 @@
-const selectedColorCell = "#ff607c";
-const unSelectedColorCell = "#ffcd6d";
-const borderColorCell = "#000";
+"use strict";
 
-let battleField = {rowsCount: 0, columnsCount: 0, rowHeight: 0, columnWidth: 0};
-let selectedCell = null;
+let yourBattleField = null;
+let opponentBattleField = null;
 
-document.getElementById("battleField").addEventListener("click", (e) => {
-    console.log(e);
-    let oldSelectedCell = selectedCell;
-    selectedCell = determiningCoordinatesPressedCell(battleField, e);
-    selectedCell = changeColorCell(battleField, selectedCell, oldSelectedCell);
+document.getElementById("yourBattleField").addEventListener("mouseenter", (e) => {
+    handlerMouseEvent(e);
 });
 
-initBattleField(battleField, 3, 5, 80, 80);
-drawBattleField(battleField);
+document.getElementById("opponentBattleField").addEventListener("mouseenter", (e) => {
+    handlerMouseEvent(e);
+});
 
-let requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
+document.getElementById("yourBattleField").addEventListener("mousemove", (e) => {
+    handlerMouseEvent(e);
+});
 
-function initBattleField(bf, rowsCount, columnsCount, rowHeight, columnWidth) {
-    bf.rowsCount = rowsCount;
-    bf.columnsCount = columnsCount;
-    bf.rowHeight = rowHeight;
-    bf.columnWidth = columnWidth;
+document.getElementById("opponentBattleField").addEventListener("mousemove", (e) => {
+    handlerMouseEvent(e);
+});
+
+document.getElementById("yourBattleField").addEventListener("mouseleave", (e) => {
+    handlerMouseEvent(e);
+});
+
+document.getElementById("opponentBattleField").addEventListener("mouseleave", (e) => {
+    handlerMouseEvent(e);
+});
+
+document.getElementById("yourBattleField").addEventListener("click", (e) => {
+    handlerMouseEvent(e);
+});
+
+document.getElementById("opponentBattleField").addEventListener("click", (e) => {
+    handlerMouseEvent(e);
+});
+
+initBattleFields(10, 10, 40, 40);
+
+function initBattleFields(rowsCount, columnsCount, rowHeight, columnWidth) {
+    yourBattleField = new BattleField({rowsCount: rowsCount, columnsCount: columnsCount,
+        rowHeight: rowHeight, columnWidth: columnWidth}, "yourBattleField", "yourBattleFieldBackground");
+
+    opponentBattleField = new BattleField({rowsCount: rowsCount, columnsCount: columnsCount,
+        rowHeight: rowHeight, columnWidth: columnWidth}, "opponentBattleField", "opponentBattleFieldBackground");
+
+    yourBattleField.drawBattleFieldBackground("https://www.html5canvastutorials.com/demos/assets/darth-vader.jpg");
+    yourBattleField.drawBattleField();
+
+    opponentBattleField.drawBattleFieldBackground("https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+    opponentBattleField.drawBattleField();
 }
 
-function drawBattleField(bf) {
-    let canvas = document.getElementById("battleField");
-
-    if (canvas.getContext) {
-        canvas.width = bf.columnsCount * bf.columnWidth;
-        canvas.height = bf.rowsCount * bf.rowHeight;
-        let ctx = canvas.getContext("2d");
-
-        for (let r = 0; r < bf.rowsCount; r++) {
-            for (let c = 0; c < bf.columnsCount; c++) {
-                ctx.fillStyle = selectedColorCell;
-                ctx.fillRect (c * bf.columnWidth, r * bf.rowHeight, bf.rowHeight, bf.columnWidth);
-
-                ctx.strokeStyle = borderColorCell;
-                ctx.strokeRect (c * bf.columnWidth, r * bf.rowHeight, bf.rowHeight, bf.columnWidth);
+function handlerMouseEvent(event) {
+    switch (event.type) {
+        case "mouseenter":
+            if (event.target.id === "yourBattleField") {
+                yourBattleField.mouseEnter(event);
+            } else if (event.target.id === "opponentBattleField") {
+                opponentBattleField.mouseEnter(event);
             }
-        }
+            break;
+        case "mousemove":
+            if (event.target.id === "yourBattleField") {
+                yourBattleField.mousemove(event);
+            } else if (event.target.id === "opponentBattleField") {
+                opponentBattleField.mousemove(event);
+            }
+            break;
+        case "mouseleave":
+            if (event.target.id === "yourBattleField") {
+                yourBattleField.mouseleave();
+            } else if (event.target.id === "opponentBattleField") {
+                opponentBattleField.mouseleave();
+            }
+            break;
+        case "click":
+            if (event.target.id === "yourBattleField") {
+                yourBattleField.onClick(event);
+            } else if (event.target.id === "opponentBattleField") {
+                opponentBattleField.onClick(event);
+            }
+            break;
+        default:
+            break;
     }
-}
-
-function determiningCoordinatesPressedCell(bf, event) {
-    let row = Math.floor(event.layerY / bf.rowHeight);
-    let column = Math.floor(event.layerX / bf.columnWidth);
-
-    return {row: row, column: column};
-}
-
-function changeColorCell(bf, sc, usc) {
-    let canvas = document.getElementById("battleField");
-
-    if (canvas.getContext) {
-        let ctx = canvas.getContext("2d");
-
-        if (usc) {
-            ctx.clearRect(usc.column * bf.columnWidth, usc.row * bf.rowHeight, bf.rowHeight, bf.columnWidth);
-
-            ctx.fillStyle = selectedColorCell;
-            ctx.fillRect (usc.column * bf.columnWidth, usc.row * bf.rowHeight, bf.rowHeight, bf.columnWidth);
-
-            ctx.strokeStyle = borderColorCell;
-            ctx.strokeRect (usc.column * bf.columnWidth, usc.row * bf.rowHeight, bf.rowHeight, bf.columnWidth);
-        }
-
-        if (usc && simpleCompare(sc, usc)) {
-            return null;
-        }
-
-        ctx.clearRect(sc.column * bf.columnWidth, sc.row * bf.rowHeight, bf.rowHeight, bf.columnWidth);
-
-        ctx.fillStyle = unSelectedColorCell;
-        ctx.fillRect (sc.column * bf.columnWidth, sc.row * bf.rowHeight, bf.rowHeight, bf.columnWidth);
-
-        ctx.strokeStyle = borderColorCell;
-        ctx.strokeRect (sc.column * bf.columnWidth, sc.row * bf.rowHeight, bf.rowHeight, bf.columnWidth);
-
-        requestAnimationFrame()
-    }
-
-    return sc;
-}
-
-function simpleCompare(obj1, obj2) {
-    return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
