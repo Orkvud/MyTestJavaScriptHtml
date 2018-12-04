@@ -35,53 +35,54 @@ document.getElementById("opponentBattleField").addEventListener("click", (e) => 
     handlerMouseEvent(e);
 });
 
-initBattleFields(10, 10, 40, 40);
+window.addEventListener("beforeunload", () => {
+    saveToLocalStorage("yourBattleFieldBackground", yourBattleField.battleField);
+    saveToLocalStorage("opponentBattleFieldBackground", opponentBattleField.battleField);
+    saveToLocalStorage("yourBattleField", yourBattleField.fogOfWar);
+    saveToLocalStorage("opponentBattleField", opponentBattleField.fogOfWar);
+})
 
-function initBattleFields(rowsCount, columnsCount, rowHeight, columnWidth) {
-    yourBattleField = new BattleField({rowsCount: rowsCount, columnsCount: columnsCount,
-        rowHeight: rowHeight, columnWidth: columnWidth}, "yourBattleField", "yourBattleFieldBackground");
+initBattleFields();
 
-    opponentBattleField = new BattleField({rowsCount: rowsCount, columnsCount: columnsCount,
-        rowHeight: rowHeight, columnWidth: columnWidth}, "opponentBattleField", "opponentBattleFieldBackground");
+function initBattleFields() {
+    yourBattleField = new BattleField("yourBattleField", "yourBattleFieldBackground");
 
-    yourBattleField.drawBattleFieldBackground("https://www.html5canvastutorials.com/demos/assets/darth-vader.jpg");
+    opponentBattleField = new BattleField("opponentBattleField", "opponentBattleFieldBackground");
+
+    yourBattleField.drawBattleFieldBackground();
     yourBattleField.drawBattleField();
 
-    opponentBattleField.drawBattleFieldBackground("https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+    opponentBattleField.drawBattleFieldBackground();
     opponentBattleField.drawBattleField();
 }
 
 function handlerMouseEvent(event) {
+    let battleField = findTargetObject(event);
     switch (event.type) {
         case "mouseenter":
-            if (event.target.id === "yourBattleField") {
-                yourBattleField.mouseEnter(event);
-            } else if (event.target.id === "opponentBattleField") {
-                opponentBattleField.mouseEnter(event);
-            }
+            battleField.mouseEnter(event.layerX, event.layerY);
             break;
         case "mousemove":
-            if (event.target.id === "yourBattleField") {
-                yourBattleField.mousemove(event);
-            } else if (event.target.id === "opponentBattleField") {
-                opponentBattleField.mousemove(event);
-            }
+            battleField.mousemove(event.layerX, event.layerY);
             break;
         case "mouseleave":
-            if (event.target.id === "yourBattleField") {
-                yourBattleField.mouseleave();
-            } else if (event.target.id === "opponentBattleField") {
-                opponentBattleField.mouseleave();
-            }
+            battleField.mouseleave();
             break;
         case "click":
-            if (event.target.id === "yourBattleField") {
-                yourBattleField.onClick(event);
-            } else if (event.target.id === "opponentBattleField") {
-                opponentBattleField.onClick(event);
-            }
+            battleField.onClick(event.layerX, event.layerY);
             break;
         default:
             break;
+    }
+}
+
+function findTargetObject(event) {
+    switch (event.target.id) {
+        case "yourBattleField":
+            return yourBattleField;
+        case "opponentBattleField":
+            return opponentBattleField;
+        default:
+            return null;
     }
 }
