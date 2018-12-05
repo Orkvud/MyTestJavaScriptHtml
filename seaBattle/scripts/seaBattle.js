@@ -33,6 +33,8 @@ document.getElementById("yourBattleField").addEventListener("click", (e) => {
 
 
 
+
+
 document.getElementById("opponentBattleField").addEventListener("click", (e) => {
     handlerMouseEvent(e);
 });
