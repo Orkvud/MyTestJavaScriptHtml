@@ -1,56 +1,18 @@
 "use strict";
 
-const stateBG = Object.freeze({
-    EMPTY: "empty",
-    SHIP: "ship",
-    STRICKEN_SHIP: "stricken_ship",
-    BOMB: "bomb",
-    USED_BOMB: "used_bomb"
-});
-
-const stateFW = Object.freeze({
-    SHOW: "show",
-    HIDE: "hide"
-})
-
-const defaultBattleField = [
-    [stateBG.EMPTY, stateBG.SHIP,  stateBG.SHIP,  stateBG.SHIP,  stateBG.SHIP,  stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.BOMB,  stateBG.EMPTY],
-    [stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY],
-    [stateBG.SHIP,  stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.SHIP],
-    [stateBG.SHIP,  stateBG.EMPTY, stateBG.SHIP,  stateBG.SHIP,  stateBG.SHIP,  stateBG.EMPTY, stateBG.SHIP,  stateBG.EMPTY, stateBG.EMPTY, stateBG.SHIP],
-    [stateBG.SHIP,  stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.SHIP,  stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY],
-    [stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY],
-    [stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.BOMB,  stateBG.EMPTY, stateBG.EMPTY, stateBG.SHIP,  stateBG.EMPTY],
-    [stateBG.EMPTY, stateBG.SHIP,  stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.SHIP,  stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY],
-    [stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.SHIP,  stateBG.EMPTY, stateBG.EMPTY, stateBG.SHIP,  stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY],
-    [stateBG.BOMB,  stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.EMPTY, stateBG.SHIP]
-];
-
-const defaultFogOfWar = [
-    [stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW, stateFW.SHOW, stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW],
-    [stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW, stateFW.SHOW, stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW],
-    [stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW, stateFW.SHOW, stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW],
-    [stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW, stateFW.SHOW, stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW],
-    [stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW, stateFW.SHOW, stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW],
-    [stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW, stateFW.SHOW, stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW],
-    [stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW, stateFW.SHOW, stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW],
-    [stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW, stateFW.SHOW, stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW],
-    [stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW, stateFW.SHOW, stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW],
-    [stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW,  stateFW.SHOW, stateFW.SHOW, stateFW.SHOW, stateFW.SHOW,  stateFW.SHOW]
-];
-
-function BattleField(idBattleField, idBattleFieldBackground, battleFieldData = {rowHeight: 40, columnWidth: 40}) {
+function BattleField(idBattleFieldBackground, idBattleFieldFogOfWar, idCover, isTurn = false, cellData = {cellHeight: 40, cellWidth: 40}) {
     this.targetCell = null;
     this.selectedCell = null;
-    this.battleFieldData = battleFieldData;
+    this.cellData = cellData;
 
-    this.idBattleField = idBattleField;
     this.idBattleFieldBackground = idBattleFieldBackground;
+    this.idBattleFieldFogOfWar = idBattleFieldFogOfWar;
+    this.idCover = idCover;
 
-    this.selectedColorCell = "rgba(160, 160, 160, 0.0)";
-    this.unSelectedColorCell = "rgb(160, 160, 160)";
-    this.selectedColorCell40 = "rgba(160, 160, 160, 0.4)";
-    this.unSelectedColorCell40 = "rgb(130, 130, 130, 1.0)";
+    this.fillShowFogOfWarCellColor = "rgb(160, 160, 160)";
+    this.fillHideFogOfWarCellColor = "rgba(160, 160, 160, 0.0)";
+    this.fillShowTargetFogOfWarCellColor = "rgb(130, 130, 130, 1.0)";
+    this.fillHideTargetFogOfWarCellColor = "rgb(130, 130, 130, 0.2)";
     this.borderColorCell = "rgb(0, 0, 0)";
     this.seaColor = "rgb(136, 185, 255)";
     this.shipColor = "rgb(0, 0, 0, 0.4)";
@@ -58,19 +20,26 @@ function BattleField(idBattleField, idBattleFieldBackground, battleFieldData = {
     this.bombColor = "rgb(255, 25, 25)";
     this.usedBombColor = "rgb(255, 145, 175)";
 
-    this.battleField = retrieveFromLocalStorage(this.idBattleFieldBackground) || defaultBattleField;
-    this.fogOfWar = retrieveFromLocalStorage(this.idBattleField) || defaultFogOfWar;
+    this.battleFieldBackground = retrieveFromLocalStorage(this.idBattleFieldBackground) || duplicateObject(defaultBattleFieldBackground);
+    this.battleFieldFogOfWar = retrieveFromLocalStorage(this.idBattleFieldFogOfWar) || duplicateObject(defaultBattleFieldFogOfWar);
 
-    this.rows = defaultBattleField.length;
-    this.columns = defaultBattleField[0].length;
+    this.rows = defaultBattleFieldBackground.length;
+    this.columns = defaultBattleFieldBackground[0].length;
+
+    this.isTurn = initTurn(isTurn, this.idCover);
+}
+
+function initTurn(isTurn, id) {
+    document.getElementById(id).style.visibility = isTurn ? "hidden" : "visible";
+    return isTurn;
 }
 
 BattleField.prototype.drawBattleFieldBackground = function (src) {
     let canvas = document.getElementById(this.idBattleFieldBackground);
 
     if (canvas.getContext) {
-        let columnWidth = this.battleFieldData.columnWidth;
-        let rowHeight = this.battleFieldData.rowHeight;
+        let columnWidth = this.cellData.cellWidth;
+        let rowHeight = this.cellData.cellHeight;
 
         canvas.width = this.columns * columnWidth;
         canvas.height = this.rows * rowHeight;
@@ -84,6 +53,10 @@ BattleField.prototype.drawBattleFieldBackground = function (src) {
             };
 
             img.src = src;
+
+            // img.src = "https://www.html5canvastutorials.com/demos/assets/darth-vader.jpg";
+            // img.src = "https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
+            // img.src = "http://hd.wallpaperswide.com/thumbs/beautiful_autumn_landscape_6-t2.jpg"
         } else {
             ctx.fillStyle = this.seaColor;
             ctx.fillRect (0, 0, canvas.width, canvas.height);
@@ -94,28 +67,24 @@ BattleField.prototype.drawBattleFieldBackground = function (src) {
 
         for (let row = 0; row < this.rows; row++) {
             for (let column = 0; column < this.columns; column++) {
-                if (this.battleField[row][column] !== stateBG.EMPTY) {
-                    ctx.fillStyle = this.determiningColorObject(this.battleField[row][column]);
-                    let x0 = column * columnWidth;
-                    let y0 = row * rowHeight;
+                if (this.battleFieldBackground[row][column] !== stateBG.EMPTY) {
+                    ctx.fillStyle = this.determiningColorObject(this.battleFieldBackground[row][column]);
                     ctx.beginPath();
-                    ctx.arc ((x0 + (columnWidth/2)), (y0 + (rowHeight/2)), columnWidth/4, 0, 360);
+                    ctx.arc ((column * columnWidth + (columnWidth/2)), (row * rowHeight + (rowHeight/2)),
+                        columnWidth/4, 0, 360);
                     ctx.fill();
                 }
             }
         }
-        // img.src = "https://www.html5canvastutorials.com/demos/assets/darth-vader.jpg";
-        // img.src = "https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
-        // img.src = "http://hd.wallpaperswide.com/thumbs/beautiful_autumn_landscape_6-t2.jpg"
     }
 };
 
-BattleField.prototype.drawBattleField = function () {
-    let canvas = document.getElementById(this.idBattleField);
+BattleField.prototype.drawBattleFieldFogOfWar = function () {
+    let canvas = document.getElementById(this.idBattleFieldFogOfWar);
 
     if (canvas.getContext) {
-        let columnWidth = this.battleFieldData.columnWidth;
-        let rowHeight = this.battleFieldData.rowHeight;
+        let columnWidth = this.cellData.cellWidth;
+        let rowHeight = this.cellData.cellHeight;
 
         canvas.width = this.columns * columnWidth;
         canvas.height = this.rows * rowHeight;
@@ -125,7 +94,7 @@ BattleField.prototype.drawBattleField = function () {
             for (let column = 0; column < this.columns; column++) {
                 ctx.clearRect(column * columnWidth, row * rowHeight, rowHeight, columnWidth);
 
-                ctx.fillStyle = this.determiningColorFogOfWar(stateFW[row][column]);
+                ctx.fillStyle = this.determiningColorFogOfWar(this.battleFieldFogOfWar[row][column]);
                 ctx.fillRect (column * columnWidth, row * rowHeight, rowHeight, columnWidth);
 
                 ctx.strokeStyle = this.borderColorCell;
@@ -135,111 +104,133 @@ BattleField.prototype.drawBattleField = function () {
     }
 };
 
-BattleField.prototype.drawCell = function (color, borderColorCell) {
-    let canvas = document.getElementById(this.idBattleField);
+BattleField.prototype.drawCell = function (idCanvas, cell, color, borderColorCell) {
+    let canvas = document.getElementById(idCanvas);
 
     if (canvas.getContext) {
-        let columnWidth = this.battleFieldData.columnWidth;
-        let rowHeight = this.battleFieldData.rowHeight;
+        let columnWidth = this.cellData.cellWidth;
+        let rowHeight = this.cellData.cellHeight;
 
         let ctx = canvas.getContext("2d");
 
-        ctx.clearRect(this.targetCell.column * columnWidth, this.targetCell.row * rowHeight, rowHeight, columnWidth);
+        ctx.clearRect(cell.column * columnWidth, cell.row * rowHeight, rowHeight, columnWidth);
 
         ctx.fillStyle = color;
-        ctx.fillRect (this.targetCell.column * columnWidth, this.targetCell.row * rowHeight, rowHeight, columnWidth);
+        ctx.fillRect (cell.column * columnWidth, cell.row * rowHeight, rowHeight, columnWidth);
 
         ctx.strokeStyle = borderColorCell;
-        ctx.strokeRect (this.targetCell.column * columnWidth, this.targetCell.row * rowHeight, rowHeight, columnWidth);
+        ctx.strokeRect (cell.column * columnWidth, cell.row * rowHeight, rowHeight, columnWidth);
+    }
+};
+
+BattleField.prototype.drawGameObject = function (idCanvas, cell, color) {
+    let canvas = document.getElementById(idCanvas);
+
+    if (canvas.getContext) {
+        let columnWidth = this.cellData.cellWidth;
+        let rowHeight = this.cellData.cellHeight;
+
+        let ctx = canvas.getContext("2d");
+
+        ctx.clearRect(cell.column * columnWidth, cell.row * rowHeight, columnWidth, rowHeight);
+
+        ctx.fillStyle = this.seaColor;
+        ctx.fillRect (cell.column * columnWidth, cell.row * rowHeight, columnWidth, rowHeight);
+
+        ctx.fillStyle = color || this.determiningColorObject(this.battleFieldBackground[cell.row][cell.column]);
+        ctx.beginPath();
+        ctx.arc ((cell.column * columnWidth + (columnWidth/2)), (cell.row * rowHeight + (rowHeight/2)),
+            columnWidth/4, 0, 360);
+        ctx.fill();
+    }
+};
+
+BattleField.prototype.drawChangeTargetCellView = function (oldTargetCell, targetCell) {
+    let canvas = document.getElementById(this.idBattleFieldFogOfWar);
+
+    if (canvas.getContext) {
+        let columnWidth = this.cellData.cellWidth;
+        let rowHeight = this.cellData.cellHeight;
+
+        let ctx = canvas.getContext("2d");
+
+        if (oldTargetCell) {
+            ctx.clearRect(oldTargetCell.column * columnWidth, oldTargetCell.row * rowHeight, rowHeight, columnWidth);
+
+            ctx.fillStyle = this.determiningColorFogOfWar(this.battleFieldFogOfWar[oldTargetCell.row][oldTargetCell.column]);
+            ctx.fillRect (oldTargetCell.column * columnWidth, oldTargetCell.row * rowHeight, rowHeight, columnWidth);
+
+            ctx.strokeStyle = this.borderColorCell;
+            ctx.strokeRect (oldTargetCell.column * columnWidth, oldTargetCell.row * rowHeight, rowHeight, columnWidth);
+        }
+
+        if (targetCell) {
+            ctx.clearRect(targetCell.column * columnWidth, targetCell.row * rowHeight, rowHeight, columnWidth);
+
+            ctx.fillStyle = this.determiningColorTargetFogOfWar(this.battleFieldFogOfWar[targetCell.row][targetCell.column]);
+            ctx.fillRect (targetCell.column * columnWidth, targetCell.row * rowHeight, rowHeight, columnWidth);
+
+            ctx.strokeStyle = this.borderColorCell;
+            ctx.strokeRect (targetCell.column * columnWidth, targetCell.row * rowHeight, rowHeight, columnWidth);
+        }
     }
 };
 
 BattleField.prototype.mouseEnter = function (layerX, layerY) {
-    this.targetCell = determiningCoordinatesCell(this.battleFieldData, layerX, layerY);
-    this.drawCell(simpleCompare(this.targetCell, this.selectedCell)
-        ? this.selectedColorCell40 : this.unSelectedColorCell40, this.borderColorCell);
+    this.targetCell = determiningCoordinatesCell(this.cellData, layerX, layerY);
+
+    this.drawChangeTargetCellView(null, this.targetCell);
 };
 
 BattleField.prototype.mousemove = function (layerX, layerY) {
-    let currentCell = determiningCoordinatesCell(this.battleFieldData, layerX, layerY);
-    if (this.targetCell && currentCell && simpleCompare(this.targetCell, currentCell)) {
-
-    } else {
-        if (this.targetCell) {
-            this.drawCell(simpleCompare(this.targetCell, this.selectedCell)
-                ? this.selectedColorCell : this.unSelectedColorCell, this.borderColorCell);
-        }
+    let currentCell = determiningCoordinatesCell(this.cellData, layerX, layerY);
+    if (!simpleCompare(this.targetCell, currentCell)) {
+        this.drawChangeTargetCellView(this.targetCell, currentCell);
         this.targetCell = currentCell;
-        this.drawCell(simpleCompare(this.targetCell, this.selectedCell)
-            ? this.selectedColorCell40 : this.unSelectedColorCell40, this.borderColorCell);
     }
 };
 
 BattleField.prototype.mouseleave = function () {
-    this.drawCell(simpleCompare(this.targetCell, this.selectedCell) ?
-        this.selectedColorCell : this.unSelectedColorCell);
+    this.drawChangeTargetCellView(this.targetCell, null);
     this.targetCell = null;
 };
 
 BattleField.prototype.onClick = function (layerX, layerY) {
-    console.log(event);
-    let oldSelectedCell = this.selectedCell;
-    this.selectedCell = determiningCoordinatesCell(this.battleFieldData, layerX, layerY);
+    this.selectedCell = determiningCoordinatesCell(this.cellData, layerX, layerY);
 
-    if (this.battleField[this.selectedCell.row][this.selectedCell.column]) {
-        switch (this.battleField[this.selectedCell.row][this.selectedCell.column]) {
-            case stateBG.SHIP:
-                this.battleField[this.selectedCell.row][this.selectedCell.column] = stateBG.STRICKEN_SHIP;
-                break;
-            case stateBG.STRICKEN_SHIP:
-                this.battleField[this.selectedCell.row][this.selectedCell.column] = stateBG.SHIP;
-                break;
-            case stateBG.BOMB:
-                this.battleField[this.selectedCell.row][this.selectedCell.column] = stateBG.USED_BOMB;
-                break;
-            case stateBG.USED_BOMB:
-                this.battleField[this.selectedCell.row][this.selectedCell.column] = stateBG.BOMB;
-                break;
-        }
+    switch (this.battleFieldBackground[this.selectedCell.row][this.selectedCell.column]) {
+        case stateBG.SHIP:
+            this.battleFieldBackground[this.selectedCell.row][this.selectedCell.column] = stateBG.STRICKEN_SHIP;
+            this.drawGameObject(this.idBattleFieldBackground, this.selectedCell);
+            break;
+        case stateBG.STRICKEN_SHIP:
+            break;
+        case stateBG.BOMB:
+            this.battleFieldBackground[this.selectedCell.row][this.selectedCell.column] = stateBG.USED_BOMB;
+            this.drawGameObject(this.idBattleFieldBackground, this.selectedCell);
+            break;
+        case stateBG.USED_BOMB:
+            break;
     }
 
-    this.selectedCell = this.changeColorCells(oldSelectedCell);
+    switch (this.battleFieldFogOfWar[this.selectedCell.row][this.selectedCell.column]) {
+        case stateFW.FOG_HIDDEN:
+            break;
+        case stateFW.FOG_SHOWN:
+            this.battleFieldFogOfWar[this.selectedCell.row][this.selectedCell.column] = stateFW.FOG_HIDDEN;
+            this.drawCell(this.idBattleFieldFogOfWar, this.selectedCell, this.fillHideTargetFogOfWarCellColor, this.borderColorCell);
+            break;
+    }
 };
 
-BattleField.prototype.changeColorCells = function (oldSelectedCell) {
-    let canvas = document.getElementById(this.idBattleField);
+BattleField.prototype.resetBattleField = function (){
+    this.battleFieldFogOfWar = duplicateObject(defaultBattleFieldFogOfWar);
+    saveToLocalStorage(this.idBattleFieldFogOfWar, this.battleFieldFogOfWar);
+    this.drawBattleFieldFogOfWar();
 
-    if (canvas.getContext) {
-        let columnWidth = this.battleFieldData.columnWidth;
-        let rowHeight = this.battleFieldData.rowHeight;
-
-        let ctx = canvas.getContext("2d");
-
-        if (oldSelectedCell) {
-            ctx.clearRect(oldSelectedCell.column * columnWidth, oldSelectedCell.row * rowHeight, rowHeight, columnWidth);
-
-            ctx.fillStyle = simpleCompare(this.selectedCell, oldSelectedCell)
-                ? this.unSelectedColorCell40 : this.unSelectedColorCell;
-            ctx.fillRect (oldSelectedCell.column * columnWidth, oldSelectedCell.row * rowHeight, rowHeight, columnWidth);
-
-            ctx.strokeStyle = this.borderColorCell;
-            ctx.strokeRect (oldSelectedCell.column * columnWidth, oldSelectedCell.row * rowHeight, rowHeight, columnWidth);
-        }
-
-        if (oldSelectedCell && simpleCompare(this.selectedCell, oldSelectedCell)) {
-            return null;
-        }
-
-        ctx.clearRect(this.selectedCell.column * columnWidth, this.selectedCell.row * rowHeight, rowHeight, columnWidth);
-
-        ctx.fillStyle = this.selectedColorCell40;
-        ctx.fillRect (this.selectedCell.column * columnWidth, this.selectedCell.row * rowHeight, rowHeight, columnWidth);
-
-        ctx.strokeStyle = this.borderColorCell;
-        ctx.strokeRect (this.selectedCell.column * columnWidth, this.selectedCell.row * rowHeight, rowHeight, columnWidth);
-    }
-
-    return this.selectedCell;
+    this.battleFieldBackground = duplicateObject(defaultBattleFieldBackground);
+    saveToLocalStorage(this.idBattleFieldBackground, this.battleFieldBackground);
+    this.drawBattleFieldBackground();
 };
 
 BattleField.prototype.determiningColorObject = function (cellState) {
@@ -257,9 +248,23 @@ BattleField.prototype.determiningColorObject = function (cellState) {
 
 BattleField.prototype.determiningColorFogOfWar = function (cellState) {
     switch (cellState) {
-        case stateFW.SHOW:
-            return this.unSelectedColorCell;
-        case stateFW.HIDE:
-            return this.selectedColorCell;
+        case stateFW.FOG_SHOWN:
+            return this.fillShowFogOfWarCellColor;
+        case stateFW.FOG_HIDDEN:
+            return this.fillHideFogOfWarCellColor;
     }
+};
+
+BattleField.prototype.determiningColorTargetFogOfWar = function (cellState) {
+    switch (cellState) {
+        case stateFW.FOG_SHOWN:
+            return this.fillShowTargetFogOfWarCellColor;
+        case stateFW.FOG_HIDDEN:
+            return this.fillHideTargetFogOfWarCellColor;
+    }
+};
+
+BattleField.prototype.updateTurn = function () {
+    this.isTurn = !this.isTurn;
+    document.getElementById(this.idCover).style.visibility = this.isTurn ? "hidden" : "visible"
 };

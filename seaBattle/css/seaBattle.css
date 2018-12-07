@@ -39,13 +39,31 @@ section {
     overflow: auto;
 }
 
+#yourSideCover, #opponentSideCover {
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: rgba(199, 199, 199, 0.5);
+    border-radius: 2vh;
+    visibility: hidden;
+}
+
+#opponentSide {
+
+}
+
+#controlPanel {
+    flex: 0.25;
+    background: antiquewhite;
+}
+
 #yourBattleFieldBackground, #opponentBattleFieldBackground {
     margin: 0;
     position: absolute;
     z-index: 0;
 }
 
-#yourBattleField, #opponentBattleField {
+#yourBattleFieldFogOfWar, #opponentBattleFieldFogOfWar {
     margin: 0;
     position: absolute;
     z-index: 1;
@@ -54,10 +72,10 @@ section {
     transition: 0.5s;
 }
 
-#yourBattleField:hover {
+#yourBattleFieldFogOfWar:hover {
     border: 1px solid black;
 }
 
-#opponentBattleField:hover {
+#opponentBattleFieldFogOfWar:hover {
     border: 1px solid black;
 }
