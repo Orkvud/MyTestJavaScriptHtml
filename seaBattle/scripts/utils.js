@@ -1,8 +1,8 @@
 "use strict";
 
 function determiningCoordinatesCell(bf, layerX, layerY) {
-    let row = Math.floor(layerY / bf.rowHeight);
-    let column = Math.floor(layerX / bf.columnWidth);
+    let row = Math.floor(layerY / bf.cellHeight);
+    let column = Math.floor(layerX / bf.cellWidth);
 
     return {row: row, column: column};
 }
@@ -22,4 +22,8 @@ function retrieveFromLocalStorage(key) {
 
 function isObject(obj) {
     return obj === Object(obj);
+}
+
+function duplicateObject(obj) {
+    return JSON.parse(JSON.stringify(obj));
 }

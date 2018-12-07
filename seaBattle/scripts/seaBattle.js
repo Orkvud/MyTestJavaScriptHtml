@@ -3,65 +3,72 @@
 let yourBattleField = null;
 let opponentBattleField = null;
 
-document.getElementById("yourBattleField").addEventListener("mouseenter", (e) => {
+document.getElementById("yourBattleFieldFogOfWar").addEventListener("mouseenter", (e) => {
     handlerMouseEvent(e);
 });
 
-document.getElementById("opponentBattleField").addEventListener("mouseenter", (e) => {
+document.getElementById("opponentBattleFieldFogOfWar").addEventListener("mouseenter", (e) => {
     handlerMouseEvent(e);
 });
 
-document.getElementById("yourBattleField").addEventListener("mousemove", (e) => {
+document.getElementById("yourBattleFieldFogOfWar").addEventListener("mousemove", (e) => {
     handlerMouseEvent(e);
 });
 
-document.getElementById("opponentBattleField").addEventListener("mousemove", (e) => {
+document.getElementById("opponentBattleFieldFogOfWar").addEventListener("mousemove", (e) => {
     handlerMouseEvent(e);
 });
 
-document.getElementById("yourBattleField").addEventListener("mouseleave", (e) => {
+document.getElementById("yourBattleFieldFogOfWar").addEventListener("mouseleave", (e) => {
     handlerMouseEvent(e);
 });
 
-document.getElementById("opponentBattleField").addEventListener("mouseleave", (e) => {
+document.getElementById("opponentBattleFieldFogOfWar").addEventListener("mouseleave", (e) => {
     handlerMouseEvent(e);
 });
 
-document.getElementById("yourBattleField").addEventListener("click", (e) => {
+document.getElementById("yourBattleFieldFogOfWar").addEventListener("click", (e) => {
     handlerMouseEvent(e);
 });
 
 
-
-
-
-document.getElementById("opponentBattleField").addEventListener("click", (e) => {
+document.getElementById("opponentBattleFieldFogOfWar").addEventListener("click", (e) => {
     handlerMouseEvent(e);
+});
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+    localStorage.clear();
+    yourBattleField.resetBattleField();
+    opponentBattleField.resetBattleField();
 });
 
 window.addEventListener("beforeunload", () => {
-    saveToLocalStorage("yourBattleFieldBackground", yourBattleField.battleField);
-    saveToLocalStorage("opponentBattleFieldBackground", opponentBattleField.battleField);
-    saveToLocalStorage("yourBattleField", yourBattleField.fogOfWar);
-    saveToLocalStorage("opponentBattleField", opponentBattleField.fogOfWar);
-})
+    saveToLocalStorage("yourBattleFieldBackground", yourBattleField.battleFieldBackground);
+    saveToLocalStorage("opponentBattleFieldBackground", opponentBattleField.battleFieldBackground);
+    saveToLocalStorage("yourBattleFieldFogOfWar", yourBattleField.battleFieldFogOfWar);
+    saveToLocalStorage("opponentBattleFieldFogOfWar", opponentBattleField.battleFieldFogOfWar);
+    saveToLocalStorage("whoseTurn", yourBattleField.isTurn ? "myTurn" : "opponentTurn")
+});
 
 initBattleFields();
 
 function initBattleFields() {
-    yourBattleField = new BattleField("yourBattleField", "yourBattleFieldBackground");
+    let whoseTurn = retrieveFromLocalStorage("whoseTurn");
 
-    opponentBattleField = new BattleField("opponentBattleField", "opponentBattleFieldBackground");
+    yourBattleField = new BattleField("yourBattleFieldBackground", "yourBattleFieldFogOfWar",
+        "yourSideCover", whoseTurn === "myTurn");
+    opponentBattleField = new BattleField("opponentBattleFieldBackground", "opponentBattleFieldFogOfWar",
+        "opponentSideCover", whoseTurn === "opponentTurn");
 
     yourBattleField.drawBattleFieldBackground();
-    yourBattleField.drawBattleField();
+    yourBattleField.drawBattleFieldFogOfWar();
 
     opponentBattleField.drawBattleFieldBackground();
-    opponentBattleField.drawBattleField();
+    opponentBattleField.drawBattleFieldFogOfWar();
 }
 
 function handlerMouseEvent(event) {
-    let battleField = findTargetObject(event);
+    let battleField = findTargetBattleField(event);
     switch (event.type) {
         case "mouseenter":
             battleField.mouseEnter(event.layerX, event.layerY);
@@ -74,17 +81,19 @@ function handlerMouseEvent(event) {
             break;
         case "click":
             battleField.onClick(event.layerX, event.layerY);
+            opponentBattleField.updateTurn();
+            yourBattleField.updateTurn();
             break;
         default:
             break;
     }
 }
 
-function findTargetObject(event) {
+function findTargetBattleField(event) {
     switch (event.target.id) {
-        case "yourBattleField":
+        case "yourBattleFieldFogOfWar":
             return yourBattleField;
-        case "opponentBattleField":
+        case "opponentBattleFieldFogOfWar":
             return opponentBattleField;
         default:
             return null;

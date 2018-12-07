@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="css/seaBattle.css">
 
+    <script src="scripts/const.js" defer></script>
     <script src="scripts/utils.js" defer></script>
     <script src="scripts/battleFieldModel.js" defer></script>
     <script src="scripts/seaBattle.js" defer></script>
@@ -19,12 +20,18 @@
     <main>
         <section id="yourSide">
             <canvas id="yourBattleFieldBackground">Error</canvas>
-            <canvas id="yourBattleField">Error</canvas>
+            <canvas id="yourBattleFieldFogOfWar">Error</canvas>
+            <div id="yourSideCover"></div>
         </section>
 
         <section id="opponentSide">
             <canvas id="opponentBattleFieldBackground">Error</canvas>
-            <canvas id="opponentBattleField">Error</canvas>
+            <canvas id="opponentBattleFieldFogOfWar">Error</canvas>
+            <div id="opponentSideCover"></div>
+        </section>
+
+        <section id="controlPanel">
+            <button id="clearBtn">Clear</button>
         </section>
     </main>
 
