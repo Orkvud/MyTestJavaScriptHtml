@@ -39,7 +39,7 @@ section {
     overflow: auto;
 }
 
-#yourSideCover, #opponentSideCover {
+#playerOneBlocked, #playerTwoBlocked {
     width: 100%;
     height: 100%;
     z-index: 2;
@@ -48,7 +48,7 @@ section {
     visibility: hidden;
 }
 
-#opponentSide {
+#playerTwoSide {
 
 }
 
@@ -57,13 +57,13 @@ section {
     background: antiquewhite;
 }
 
-#yourBattleFieldBackground, #opponentBattleFieldBackground {
+#playerOneBackground, #playerTwoBackground {
     margin: 0;
     position: absolute;
     z-index: 0;
 }
 
-#yourBattleFieldFogOfWar, #opponentBattleFieldFogOfWar {
+#playerOneFogOfWar, #playerTwoFogOfWar {
     margin: 0;
     position: absolute;
     z-index: 1;
@@ -72,10 +72,10 @@ section {
     transition: 0.5s;
 }
 
-#yourBattleFieldFogOfWar:hover {
+#playerOneFogOfWar:hover {
     border: 1px solid black;
 }
 
-#opponentBattleFieldFogOfWar:hover {
+#playerTwoFogOfWar:hover {
     border: 1px solid black;
 }

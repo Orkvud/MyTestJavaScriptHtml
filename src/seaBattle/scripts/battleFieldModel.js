@@ -1,13 +1,16 @@
 "use strict";
 
-function BattleField(idBattleFieldBackground, idBattleFieldFogOfWar, idCover, isTurn = false, cellData = {cellHeight: 40, cellWidth: 40}) {
+const CELL_DATA = {cellHeight: 40, cellWidth: 40};
+
+function BattleField(id, idBackground, idFogOfWar, idBlocked, isMyTurn = false) {
+    this.id = id;
+
     this.targetCell = null;
     this.selectedCell = null;
-    this.cellData = cellData;
 
-    this.idBattleFieldBackground = idBattleFieldBackground;
-    this.idBattleFieldFogOfWar = idBattleFieldFogOfWar;
-    this.idCover = idCover;
+    this.idBackground = idBackground;
+    this.idFogOfWar = idFogOfWar;
+    this.idBlocked = idBlocked;
 
     this.fillShowFogOfWarCellColor = "rgb(160, 160, 160)";
     this.fillHideFogOfWarCellColor = "rgba(160, 160, 160, 0.0)";
@@ -20,71 +23,73 @@ function BattleField(idBattleFieldBackground, idBattleFieldFogOfWar, idCover, is
     this.bombColor = "rgb(255, 25, 25)";
     this.usedBombColor = "rgb(255, 145, 175)";
 
-    this.battleFieldBackground = retrieveFromLocalStorage(this.idBattleFieldBackground) || duplicateObject(defaultBattleFieldBackground);
-    this.battleFieldFogOfWar = retrieveFromLocalStorage(this.idBattleFieldFogOfWar) || duplicateObject(defaultBattleFieldFogOfWar);
+    this.battleFieldBackground = retrieveFromStorage(this.idBackground) || duplicateObject(defaultBattleFieldBackground);
+    this.battleFieldFogOfWar = retrieveFromStorage(this.idFogOfWar) || duplicateObject(defaultBattleFieldFogOfWar);
 
     this.rows = defaultBattleFieldBackground.length;
     this.columns = defaultBattleFieldBackground[0].length;
 
-    this.isTurn = initTurn(isTurn, this.idCover);
+    this.isMyTurn = initMuTurn(isMyTurn, this.idBlocked);
 }
 
-function initTurn(isTurn, id) {
-    document.getElementById(id).style.visibility = isTurn ? "hidden" : "visible";
-    return isTurn;
+function initMuTurn(isMyTurn, id) {
+    document.getElementById(id).style.visibility = isMyTurn ? "hidden" : "visible";
+    return isMyTurn;
 }
 
 BattleField.prototype.drawBattleFieldBackground = function (src) {
-    let canvas = document.getElementById(this.idBattleFieldBackground);
-
-    if (canvas.getContext) {
-        let columnWidth = this.cellData.cellWidth;
-        let rowHeight = this.cellData.cellHeight;
-
-        canvas.width = this.columns * columnWidth;
-        canvas.height = this.rows * rowHeight;
-        let ctx = canvas.getContext("2d");
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (src) {
-            let img = new Image;
-            img.onload = function () {
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            };
-
-            img.src = src;
-
-            // img.src = "https://www.html5canvastutorials.com/demos/assets/darth-vader.jpg";
-            // img.src = "https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
-            // img.src = "http://hd.wallpaperswide.com/thumbs/beautiful_autumn_landscape_6-t2.jpg"
-        } else {
-            ctx.fillStyle = this.seaColor;
-            ctx.fillRect (0, 0, canvas.width, canvas.height);
-
-            ctx.strokeStyle = this.borderColorCell;
-            ctx.strokeRect (0, 0, canvas.width, canvas.height);
-        }
-
-        for (let row = 0; row < this.rows; row++) {
-            for (let column = 0; column < this.columns; column++) {
-                if (this.battleFieldBackground[row][column] !== stateBG.EMPTY) {
-                    ctx.fillStyle = this.determiningColorObject(this.battleFieldBackground[row][column]);
-                    ctx.beginPath();
-                    ctx.arc ((column * columnWidth + (columnWidth/2)), (row * rowHeight + (rowHeight/2)),
-                        columnWidth/4, 0, 360);
-                    ctx.fill();
-                }
-            }
-        }
-    }
+    drawBattleFieldBackground.call(this, [src, this.idBackground, this.battleFieldBackground, CELL_DATA,
+        this.columns, this.rows, this.seaColor, this.borderColorCell, this.determiningColorObject])
+    // let canvas = document.getElementById(this.idBackground);
+    //
+    // if (canvas.getContext) {
+    //     let columnWidth = CELL_DATA.cellWidth;
+    //     let rowHeight = CELL_DATA.cellHeight;
+    //
+    //     canvas.width = this.columns * columnWidth;
+    //     canvas.height = this.rows * rowHeight;
+    //     let ctx = canvas.getContext("2d");
+    //
+    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //     if (src) {
+    //         let img = new Image;
+    //         img.onload = function () {
+    //             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    //         };
+    //
+    //         img.src = src;
+    //
+    //         // img.src = "https://www.html5canvastutorials.com/demos/assets/darth-vader.jpg";
+    //         // img.src = "https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
+    //         // img.src = "http://hd.wallpaperswide.com/thumbs/beautiful_autumn_landscape_6-t2.jpg"
+    //     } else {
+    //         ctx.fillStyle = this.seaColor;
+    //         ctx.fillRect (0, 0, canvas.width, canvas.height);
+    //
+    //         ctx.strokeStyle = this.borderColorCell;
+    //         ctx.strokeRect (0, 0, canvas.width, canvas.height);
+    //     }
+    //
+    //     for (let row = 0; row < this.rows; row++) {
+    //         for (let column = 0; column < this.columns; column++) {
+    //             if (this.battleFieldBackground[row][column] !== stateBG.EMPTY) {
+    //                 ctx.fillStyle = this.determiningColorObject(this.battleFieldBackground[row][column]);
+    //                 ctx.beginPath();
+    //                 ctx.arc ((column * columnWidth + (columnWidth/2)), (row * rowHeight + (rowHeight/2)),
+    //                     columnWidth/4, 0, 360);
+    //                 ctx.fill();
+    //             }
+    //         }
+    //     }
+    // }
 };
 
 BattleField.prototype.drawBattleFieldFogOfWar = function () {
-    let canvas = document.getElementById(this.idBattleFieldFogOfWar);
+    let canvas = document.getElementById(this.idFogOfWar);
 
     if (canvas.getContext) {
-        let columnWidth = this.cellData.cellWidth;
-        let rowHeight = this.cellData.cellHeight;
+        let columnWidth = CELL_DATA.cellWidth;
+        let rowHeight = CELL_DATA.cellHeight;
 
         canvas.width = this.columns * columnWidth;
         canvas.height = this.rows * rowHeight;
@@ -108,8 +113,8 @@ BattleField.prototype.drawCell = function (idCanvas, cell, color, borderColorCel
     let canvas = document.getElementById(idCanvas);
 
     if (canvas.getContext) {
-        let columnWidth = this.cellData.cellWidth;
-        let rowHeight = this.cellData.cellHeight;
+        let columnWidth = CELL_DATA.cellWidth;
+        let rowHeight = CELL_DATA.cellHeight;
 
         let ctx = canvas.getContext("2d");
 
@@ -127,8 +132,8 @@ BattleField.prototype.drawGameObject = function (idCanvas, cell, color) {
     let canvas = document.getElementById(idCanvas);
 
     if (canvas.getContext) {
-        let columnWidth = this.cellData.cellWidth;
-        let rowHeight = this.cellData.cellHeight;
+        let columnWidth = CELL_DATA.cellWidth;
+        let rowHeight = CELL_DATA.cellHeight;
 
         let ctx = canvas.getContext("2d");
 
@@ -146,11 +151,11 @@ BattleField.prototype.drawGameObject = function (idCanvas, cell, color) {
 };
 
 BattleField.prototype.drawChangeTargetCellView = function (oldTargetCell, targetCell) {
-    let canvas = document.getElementById(this.idBattleFieldFogOfWar);
+    let canvas = document.getElementById(this.idFogOfWar);
 
     if (canvas.getContext) {
-        let columnWidth = this.cellData.cellWidth;
-        let rowHeight = this.cellData.cellHeight;
+        let columnWidth = CELL_DATA.cellWidth;
+        let rowHeight = CELL_DATA.cellHeight;
 
         let ctx = canvas.getContext("2d");
 
@@ -177,13 +182,13 @@ BattleField.prototype.drawChangeTargetCellView = function (oldTargetCell, target
 };
 
 BattleField.prototype.mouseEnter = function (layerX, layerY) {
-    this.targetCell = determiningCoordinatesCell(this.cellData, layerX, layerY);
+    this.targetCell = determiningCoordinatesCell(CELL_DATA, layerX, layerY);
 
     this.drawChangeTargetCellView(null, this.targetCell);
 };
 
 BattleField.prototype.mousemove = function (layerX, layerY) {
-    let currentCell = determiningCoordinatesCell(this.cellData, layerX, layerY);
+    let currentCell = determiningCoordinatesCell(CELL_DATA, layerX, layerY);
     if (!simpleCompare(this.targetCell, currentCell)) {
         this.drawChangeTargetCellView(this.targetCell, currentCell);
         this.targetCell = currentCell;
@@ -196,18 +201,18 @@ BattleField.prototype.mouseleave = function () {
 };
 
 BattleField.prototype.onClick = function (layerX, layerY) {
-    this.selectedCell = determiningCoordinatesCell(this.cellData, layerX, layerY);
+    this.selectedCell = determiningCoordinatesCell(CELL_DATA, layerX, layerY);
 
     switch (this.battleFieldBackground[this.selectedCell.row][this.selectedCell.column]) {
         case stateBG.SHIP:
             this.battleFieldBackground[this.selectedCell.row][this.selectedCell.column] = stateBG.STRICKEN_SHIP;
-            this.drawGameObject(this.idBattleFieldBackground, this.selectedCell);
+            this.drawGameObject(this.idBackground, this.selectedCell);
             break;
         case stateBG.STRICKEN_SHIP:
             break;
         case stateBG.BOMB:
             this.battleFieldBackground[this.selectedCell.row][this.selectedCell.column] = stateBG.USED_BOMB;
-            this.drawGameObject(this.idBattleFieldBackground, this.selectedCell);
+            this.drawGameObject(this.idBackground, this.selectedCell);
             break;
         case stateBG.USED_BOMB:
             break;
@@ -218,19 +223,25 @@ BattleField.prototype.onClick = function (layerX, layerY) {
             break;
         case stateFW.FOG_SHOWN:
             this.battleFieldFogOfWar[this.selectedCell.row][this.selectedCell.column] = stateFW.FOG_HIDDEN;
-            this.drawCell(this.idBattleFieldFogOfWar, this.selectedCell, this.fillHideTargetFogOfWarCellColor, this.borderColorCell);
+            this.drawCell(this.idFogOfWar, this.selectedCell, this.fillHideTargetFogOfWarCellColor, this.borderColorCell);
             break;
     }
 };
 
 BattleField.prototype.resetBattleField = function (){
     this.battleFieldFogOfWar = duplicateObject(defaultBattleFieldFogOfWar);
-    saveToLocalStorage(this.idBattleFieldFogOfWar, this.battleFieldFogOfWar);
+    saveToStorage(this.idFogOfWar, this.battleFieldFogOfWar);
     this.drawBattleFieldFogOfWar();
 
     this.battleFieldBackground = duplicateObject(defaultBattleFieldBackground);
-    saveToLocalStorage(this.idBattleFieldBackground, this.battleFieldBackground);
+    saveToStorage(this.idBackground, this.battleFieldBackground);
     this.drawBattleFieldBackground();
+};
+
+BattleField.prototype.saveBattleField = function () {
+    saveToStorage(this.idBackground, this.battleFieldBackground);
+    saveToStorage(this.idFogOfWar, this.battleFieldFogOfWar);
+    if (this.isMyTurn) saveToStorage(WHOSE_TURN, this.id)
 };
 
 BattleField.prototype.determiningColorObject = function (cellState) {
@@ -265,6 +276,6 @@ BattleField.prototype.determiningColorTargetFogOfWar = function (cellState) {
 };
 
 BattleField.prototype.updateTurn = function () {
-    this.isTurn = !this.isTurn;
-    document.getElementById(this.idCover).style.visibility = this.isTurn ? "hidden" : "visible"
+    this.isMyTurn = !this.isMyTurn;
+    document.getElementById(this.idBlocked).style.visibility = this.isMyTurn ? "hidden" : "visible"
 };
